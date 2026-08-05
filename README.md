@@ -11,3 +11,11 @@ npm start
 
 Run `npm run typecheck`, `npm test`, and `npm run lint` before pushing. Backend types are represented locally at the API boundary so this repository has no package or build dependency on the backend repository.
 
+### Windows certificate troubleshooting
+
+If npm reports `UNABLE_TO_VERIFY_LEAF_SIGNATURE`, keep TLS verification enabled and use the Windows certificate store for that terminal:
+
+```powershell
+$env:NODE_OPTIONS='--use-system-ca'
+npm install
+```
