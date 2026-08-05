@@ -6,5 +6,5 @@ const client = new QueryClient();
 export default function RootLayout() {
   const hydrate = useAuth((state) => state.hydrate);
   useEffect(() => { void hydrate(); }, [hydrate]);
-  return <QueryClientProvider client={client}><Stack screenOptions={{ headerBackTitle: 'Back' }}><Stack.Screen name="index" options={{headerShown:false}} /><Stack.Screen name="(auth)" options={{headerShown:false}} /><Stack.Screen name="onboarding" options={{title:'Set up your preferences'}} /><Stack.Screen name="(tabs)" options={{headerShown:false}} /></Stack></QueryClientProvider>;
+  return <QueryClientProvider client={client}><Stack screenOptions={{ headerBackTitle: 'Back' }}><Stack.Screen name="index" options={{headerShown:false}} /><Stack.Screen name="(auth)" options={{headerShown:false}} /><Stack.Screen name="onboarding" options={{title:'Set up your preferences'}} /><Stack.Screen name="(tabs)" options={{headerShown:false}} /><Stack.Screen name="exercises" options={{headerShown:false}} /></Stack></QueryClientProvider>;
 }
