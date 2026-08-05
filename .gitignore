@@ -4,3 +4,6 @@ node_modules/
 .expo-export-check/
 dist/
 coverage/
+audit-full.json
+audit-production.json
+outdated.json
