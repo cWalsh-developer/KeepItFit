@@ -1,3 +1,110 @@
-import { Alert, Pressable, StyleSheet, Text } from 'react-native'; import { Link, useLocalSearchParams } from 'expo-router'; import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'; import { Screen } from '@/components/Screen'; import { api } from '@/lib/api'; import type { Exercise } from '@/types/exercise';
-export default function ExerciseDetail(){const{id}=useLocalSearchParams<{id:string}>();const client=useQueryClient();const query=useQuery({queryKey:['exercise',id],queryFn:()=>api<Exercise>(`/exercises/${id}`),enabled:!!id});const favourite=useMutation({mutationFn:()=>api<void>(`/exercises/${id}/favourite`,{method:'PUT'}),onSuccess:()=>Alert.alert('Saved','Exercise added to favourites.')});const duplicate=useMutation({mutationFn:()=>api<Exercise>(`/exercises/${id}/duplicate`,{method:'POST'}),onSuccess:async()=>{await client.invalidateQueries({queryKey:['exercises']});Alert.alert('Duplicated','A personal editable copy was created.')}});if(!query.data)return <Screen><Text>{query.isError?'Exercise could not be loaded.':'Loading exercise…'}</Text></Screen>;const item=query.data;return <Screen><Text accessibilityRole="header" style={s.h}>{item.name}</Text><Text style={s.meta}>{item.primary_muscle} · {item.equipment} · {item.tracking_type.replaceAll('_',' ')}</Text><Text>{item.description}</Text><Text style={s.label}>Instructions</Text><Text>{item.instructions}</Text><Text style={s.label}>Safety notes</Text><Text>{item.safety_notes}</Text><Text>{item.unilateral?'Supports separate left and right logging.':'Logged bilaterally by default.'}</Text><Pressable accessibilityRole="button" onPress={()=>favourite.mutate()} style={s.secondary}><Text style={s.secondaryText}>Add to favourites</Text></Pressable><Pressable accessibilityRole="button" onPress={()=>duplicate.mutate()} style={s.secondary}><Text style={s.secondaryText}>Duplicate as custom</Text></Pressable><Link href={{pathname:'/exercises/adaptation',params:{exerciseId:id,name:item.name}}} accessibilityRole="button" style={s.primary}>Add personal adaptation</Link><Text style={s.disclaimer}>Adaptations are your recorded training preferences, not medical advice.</Text></Screen>}const s=StyleSheet.create({h:{fontSize:30,fontWeight:'900'},meta:{fontSize:16,color:'#52625A'},label:{fontSize:18,fontWeight:'800',marginTop:8},primary:{padding:17,textAlign:'center',borderRadius:14,backgroundColor:'#176B45',color:'white',fontWeight:'800'},secondary:{minHeight:52,justifyContent:'center',alignItems:'center',borderWidth:2,borderColor:'#176B45',borderRadius:14},secondaryText:{color:'#176B45',fontWeight:'800'},disclaimer:{fontSize:14,color:'#52625A'}});
-
+import { Alert, Pressable, StyleSheet, Text } from "react-native";
+import { Link, useLocalSearchParams } from "expo-router";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { Screen } from "@/components/Screen";
+import { api } from "@/lib/api";
+import type { Exercise } from "@/types/exercise";
+export default function ExerciseDetail() {
+  const { id } = useLocalSearchParams<{ id: string }>();
+  const client = useQueryClient();
+  const query = useQuery({
+    queryKey: ["exercise", id],
+    queryFn: () => api<Exercise>(`/exercises/${id}`),
+    enabled: !!id,
+  });
+  const favourite = useMutation({
+    mutationFn: () =>
+      api<void>(`/exercises/${id}/favourite`, { method: "PUT" }),
+    onSuccess: () => Alert.alert("Saved", "Exercise added to favourites."),
+  });
+  const duplicate = useMutation({
+    mutationFn: () =>
+      api<Exercise>(`/exercises/${id}/duplicate`, { method: "POST" }),
+    onSuccess: async () => {
+      await client.invalidateQueries({ queryKey: ["exercises"] });
+      Alert.alert("Duplicated", "A personal editable copy was created.");
+    },
+  });
+  if (!query.data)
+    return (
+      <Screen>
+        <Text>
+          {query.isError
+            ? "Exercise could not be loaded."
+            : "Loading exercise…"}
+        </Text>
+      </Screen>
+    );
+  const item = query.data;
+  return (
+    <Screen>
+      <Text accessibilityRole="header" style={s.h}>
+        {item.name}
+      </Text>
+      <Text style={s.meta}>
+        {item.primary_muscle} · {item.equipment} ·{" "}
+        {item.tracking_type.replaceAll("_", " ")}
+      </Text>
+      <Text>{item.description}</Text>
+      <Text style={s.label}>Instructions</Text>
+      <Text>{item.instructions}</Text>
+      <Text style={s.label}>Safety notes</Text>
+      <Text>{item.safety_notes}</Text>
+      <Text>
+        {item.unilateral
+          ? "Supports separate left and right logging."
+          : "Logged bilaterally by default."}
+      </Text>
+      <Pressable
+        accessibilityRole="button"
+        onPress={() => favourite.mutate()}
+        style={s.secondary}
+      >
+        <Text style={s.secondaryText}>Add to favourites</Text>
+      </Pressable>
+      <Pressable
+        accessibilityRole="button"
+        onPress={() => duplicate.mutate()}
+        style={s.secondary}
+      >
+        <Text style={s.secondaryText}>Duplicate as custom</Text>
+      </Pressable>
+      <Link
+        href={{
+          pathname: "/exercises/adaptation",
+          params: { exerciseId: id, name: item.name },
+        }}
+        accessibilityRole="button"
+        style={s.primary}
+      >
+        Add personal adaptation
+      </Link>
+      <Text style={s.disclaimer}>
+        Adaptations are your recorded training preferences, not medical advice.
+      </Text>
+    </Screen>
+  );
+}
+const s = StyleSheet.create({
+  h: { fontSize: 30, fontWeight: "900" },
+  meta: { fontSize: 16, color: "#52625A" },
+  label: { fontSize: 18, fontWeight: "800", marginTop: 8 },
+  primary: {
+    padding: 17,
+    textAlign: "center",
+    borderRadius: 14,
+    backgroundColor: "#176B45",
+    color: "white",
+    fontWeight: "800",
+  },
+  secondary: {
+    minHeight: 52,
+    justifyContent: "center",
+    alignItems: "center",
+    borderWidth: 2,
+    borderColor: "#176B45",
+    borderRadius: 14,
+  },
+  secondaryText: { color: "#176B45", fontWeight: "800" },
+  disclaimer: { fontSize: 14, color: "#52625A" },
+});

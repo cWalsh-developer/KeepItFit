@@ -1,3 +1,30 @@
-import { moveExercise, shortenedTemplate } from './templates'; import type { TemplateExercise } from '@/types/template';
-const items:TemplateExercise[]=[{exercise_id:'a',position:0,target_sets:3,side_mode:'bilateral',priority:2},{exercise_id:'b',position:1,target_sets:3,side_mode:'separate',priority:1}];
-describe('template helpers',()=>{it('reorders and renumbers',()=>expect(moveExercise(items,1,-1).map(x=>[x.exercise_id,x.position])).toEqual([['b',0],['a',1]]));it('keeps the highest priority exercise in a shortened session',()=>expect(shortenedTemplate(items,15,60)[0].exercise_id).toBe('b'));});
+import { describe, expect, it } from "vitest";
+import { moveExercise, shortenedTemplate } from "./templates";
+import type { TemplateExercise } from "@/types/template";
+const items: TemplateExercise[] = [
+  {
+    exercise_id: "a",
+    position: 0,
+    target_sets: 3,
+    side_mode: "bilateral",
+    priority: 2,
+  },
+  {
+    exercise_id: "b",
+    position: 1,
+    target_sets: 3,
+    side_mode: "separate",
+    priority: 1,
+  },
+];
+describe("template helpers", () => {
+  it("reorders and renumbers", () =>
+    expect(
+      moveExercise(items, 1, -1).map((x) => [x.exercise_id, x.position]),
+    ).toEqual([
+      ["b", 0],
+      ["a", 1],
+    ]));
+  it("keeps the highest priority exercise in a shortened session", () =>
+    expect(shortenedTemplate(items, 15, 60)[0].exercise_id).toBe("b"));
+});

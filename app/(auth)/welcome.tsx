@@ -1,2 +1,52 @@
-import { Link } from 'expo-router'; import { StyleSheet, Text, View } from 'react-native'; import { Screen } from '@/components/Screen'; import { PRODUCT_NAME } from '@/config';
-export default function Welcome(){return <Screen><View style={s.hero}><Text accessibilityRole="header" style={s.h}>{PRODUCT_NAME}</Text><Text style={s.p}>Training that adapts to your body, schedule and preferences.</Text></View><Link href="/(auth)/register" accessibilityRole="button" style={s.primary}>Create account</Link><Link href="/(auth)/login" accessibilityRole="button" style={s.secondary}>Log in</Link></Screen>}const s=StyleSheet.create({hero:{paddingVertical:72,gap:14},h:{fontSize:38,fontWeight:'900',color:'#142019'},p:{fontSize:20,lineHeight:30,color:'#435047'},primary:{padding:17,textAlign:'center',borderRadius:14,backgroundColor:'#176B45',color:'white',fontSize:18,fontWeight:'800'},secondary:{padding:17,textAlign:'center',borderRadius:14,borderWidth:2,borderColor:'#176B45',color:'#176B45',fontSize:18,fontWeight:'800'}});
+import { Link } from "expo-router";
+import { StyleSheet, Text, View } from "react-native";
+import { Screen } from "@/components/Screen";
+import { PRODUCT_NAME } from "@/config";
+export default function Welcome() {
+  return (
+    <Screen>
+      <View style={s.hero}>
+        <Text accessibilityRole="header" style={s.h}>
+          {PRODUCT_NAME}
+        </Text>
+        <Text style={s.p}>
+          Training that adapts to your body, schedule and preferences.
+        </Text>
+      </View>
+      <Link
+        href="/(auth)/register"
+        accessibilityRole="button"
+        style={s.primary}
+      >
+        Create account
+      </Link>
+      <Link href="/(auth)/login" accessibilityRole="button" style={s.secondary}>
+        Log in
+      </Link>
+    </Screen>
+  );
+}
+const s = StyleSheet.create({
+  hero: { paddingVertical: 72, gap: 14 },
+  h: { fontSize: 38, fontWeight: "900", color: "#142019" },
+  p: { fontSize: 20, lineHeight: 30, color: "#435047" },
+  primary: {
+    padding: 17,
+    textAlign: "center",
+    borderRadius: 14,
+    backgroundColor: "#176B45",
+    color: "white",
+    fontSize: 18,
+    fontWeight: "800",
+  },
+  secondary: {
+    padding: 17,
+    textAlign: "center",
+    borderRadius: 14,
+    borderWidth: 2,
+    borderColor: "#176B45",
+    color: "#176B45",
+    fontSize: 18,
+    fontWeight: "800",
+  },
+});

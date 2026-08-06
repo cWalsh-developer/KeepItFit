@@ -1,3 +1,72 @@
-import { useState } from 'react'; import { Alert } from 'react-native'; import { router } from 'expo-router'; import { useQueryClient } from '@tanstack/react-query'; import { Screen } from '@/components/Screen'; import { FormField } from '@/components/FormField'; import { PrimaryButton } from '@/components/PrimaryButton'; import { api } from '@/lib/api';
-export default function NewExercise(){const[name,setName]=useState('');const[muscle,setMuscle]=useState('');const[equipment,setEquipment]=useState('');const[tracking,setTracking]=useState('weight_reps');const[instructions,setInstructions]=useState('');const[safety,setSafety]=useState('');const client=useQueryClient();async function save(){if(!name.trim()||!muscle.trim()||!tracking){Alert.alert('Check required fields','Name, muscle group and tracking type are required.');return;}await api('/exercises',{method:'POST',body:JSON.stringify({name:name.trim(),primary_muscle:muscle.trim(),equipment:equipment.trim()||'Other',tracking_type:tracking,instructions,safety_notes:safety})});await client.invalidateQueries({queryKey:['exercises']});router.back()}return <Screen><FormField label="Exercise name" value={name} onChangeText={setName}/><FormField label="Primary muscle group" value={muscle} onChangeText={setMuscle}/><FormField label="Equipment" value={equipment} onChangeText={setEquipment}/><FormField label="Tracking type" value={tracking} onChangeText={setTracking}/><FormField label="Instructions" value={instructions} onChangeText={setInstructions} multiline/><FormField label="Safety notes" value={safety} onChangeText={setSafety} multiline/><PrimaryButton label="Create exercise" onPress={()=>void save()}/></Screen>}
-
+import { useState } from "react";
+import { Alert } from "react-native";
+import { router } from "expo-router";
+import { useQueryClient } from "@tanstack/react-query";
+import { Screen } from "@/components/Screen";
+import { FormField } from "@/components/FormField";
+import { PrimaryButton } from "@/components/PrimaryButton";
+import { api } from "@/lib/api";
+export default function NewExercise() {
+  const [name, setName] = useState("");
+  const [muscle, setMuscle] = useState("");
+  const [equipment, setEquipment] = useState("");
+  const [tracking, setTracking] = useState("weight_reps");
+  const [instructions, setInstructions] = useState("");
+  const [safety, setSafety] = useState("");
+  const client = useQueryClient();
+  async function save() {
+    if (!name.trim() || !muscle.trim() || !tracking) {
+      Alert.alert(
+        "Check required fields",
+        "Name, muscle group and tracking type are required.",
+      );
+      return;
+    }
+    await api("/exercises", {
+      method: "POST",
+      body: JSON.stringify({
+        name: name.trim(),
+        primary_muscle: muscle.trim(),
+        equipment: equipment.trim() || "Other",
+        tracking_type: tracking,
+        instructions,
+        safety_notes: safety,
+      }),
+    });
+    await client.invalidateQueries({ queryKey: ["exercises"] });
+    router.back();
+  }
+  return (
+    <Screen>
+      <FormField label="Exercise name" value={name} onChangeText={setName} />
+      <FormField
+        label="Primary muscle group"
+        value={muscle}
+        onChangeText={setMuscle}
+      />
+      <FormField
+        label="Equipment"
+        value={equipment}
+        onChangeText={setEquipment}
+      />
+      <FormField
+        label="Tracking type"
+        value={tracking}
+        onChangeText={setTracking}
+      />
+      <FormField
+        label="Instructions"
+        value={instructions}
+        onChangeText={setInstructions}
+        multiline
+      />
+      <FormField
+        label="Safety notes"
+        value={safety}
+        onChangeText={setSafety}
+        multiline
+      />
+      <PrimaryButton label="Create exercise" onPress={() => void save()} />
+    </Screen>
+  );
+}

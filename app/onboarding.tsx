@@ -1,3 +1,83 @@
-import { useState } from 'react'; import { router } from 'expo-router'; import { Switch, Text, View } from 'react-native'; import { Screen } from '@/components/Screen'; import { FormField } from '@/components/FormField'; // @ts-ignore - TSX component import in this environment
-import { PrimaryButton } from '@/components/PrimaryButton'; import { api } from '@/lib/api'; import { useAuth } from '@/store/auth';
-export default function Onboarding(){const[unit,setUnit]=useState('kg');const[rest,setRest]=useState('90');const[target,setTarget]=useState('3');const[reduced,setReduced]=useState(false);const[haptics,setHaptics]=useState(true);const finish=useAuth(x=>x.finishOnboarding);async function save(){await api('/profile',{method:'PATCH',body:JSON.stringify({weight_unit:unit,default_rest_seconds:Number(rest),weekly_target:Number(target),reduced_motion:reduced,haptics})});await finish();router.replace('/(tabs)')}return <Screen><Text>These defaults can be changed at any time.</Text><FormField label="Weight unit (kg or lb)" value={unit} onChangeText={setUnit}/><FormField label="Default rest time in seconds" keyboardType="number-pad" value={rest} onChangeText={setRest}/><FormField label="Weekly workout target" keyboardType="number-pad" value={target} onChangeText={setTarget}/><View style={{flexDirection:'row',justifyContent:'space-between',alignItems:'center',minHeight:56}}><Text style={{fontSize:17}}>Reduce animations</Text><Switch accessibilityLabel="Reduce animations" value={reduced} onValueChange={setReduced}/></View><View style={{flexDirection:'row',justifyContent:'space-between',alignItems:'center',minHeight:56}}><Text style={{fontSize:17}}>Haptic feedback</Text><Switch accessibilityLabel="Haptic feedback" value={haptics} onValueChange={setHaptics}/></View><PrimaryButton label="Save preferences" onPress={()=>void save()}/></Screen>}
+import { useState } from "react";
+import { router } from "expo-router";
+import { Switch, Text, View } from "react-native";
+import { Screen } from "@/components/Screen";
+import { FormField } from "@/components/FormField"; // @ts-ignore - TSX component import in this environment
+import { PrimaryButton } from "@/components/PrimaryButton";
+import { api } from "@/lib/api";
+import { useAuth } from "@/store/auth";
+export default function Onboarding() {
+  const [unit, setUnit] = useState("kg");
+  const [rest, setRest] = useState("90");
+  const [target, setTarget] = useState("3");
+  const [reduced, setReduced] = useState(false);
+  const [haptics, setHaptics] = useState(true);
+  const finish = useAuth((x) => x.finishOnboarding);
+  async function save() {
+    await api("/profile", {
+      method: "PATCH",
+      body: JSON.stringify({
+        weight_unit: unit,
+        default_rest_seconds: Number(rest),
+        weekly_target: Number(target),
+        reduced_motion: reduced,
+        haptics,
+      }),
+    });
+    await finish();
+    router.replace("/(tabs)");
+  }
+  return (
+    <Screen>
+      <Text>These defaults can be changed at any time.</Text>
+      <FormField
+        label="Weight unit (kg or lb)"
+        value={unit}
+        onChangeText={setUnit}
+      />
+      <FormField
+        label="Default rest time in seconds"
+        keyboardType="number-pad"
+        value={rest}
+        onChangeText={setRest}
+      />
+      <FormField
+        label="Weekly workout target"
+        keyboardType="number-pad"
+        value={target}
+        onChangeText={setTarget}
+      />
+      <View
+        style={{
+          flexDirection: "row",
+          justifyContent: "space-between",
+          alignItems: "center",
+          minHeight: 56,
+        }}
+      >
+        <Text style={{ fontSize: 17 }}>Reduce animations</Text>
+        <Switch
+          accessibilityLabel="Reduce animations"
+          value={reduced}
+          onValueChange={setReduced}
+        />
+      </View>
+      <View
+        style={{
+          flexDirection: "row",
+          justifyContent: "space-between",
+          alignItems: "center",
+          minHeight: 56,
+        }}
+      >
+        <Text style={{ fontSize: 17 }}>Haptic feedback</Text>
+        <Switch
+          accessibilityLabel="Haptic feedback"
+          value={haptics}
+          onValueChange={setHaptics}
+        />
+      </View>
+      <PrimaryButton label="Save preferences" onPress={() => void save()} />
+    </Screen>
+  );
+}

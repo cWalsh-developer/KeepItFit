@@ -1,1 +1,19 @@
-import { Text } from 'react-native'; import { Screen } from '@/components/Screen'; import { EmptyState } from '@/components/EmptyState'; export default function Schedule(){return <Screen><Text accessibilityRole="header" style={{fontSize:30,fontWeight:'800'}}>Schedule</Text><EmptyState title="No availability yet" body="Tell us when you are free and we will explain practical options." /></Screen>}
+import { Text } from "react-native";
+import { Screen } from "@/components/Screen";
+import { EmptyState } from "@/components/EmptyState";
+export default function Schedule() {
+  return (
+    <Screen>
+      <Text
+        accessibilityRole="header"
+        style={{ fontSize: 30, fontWeight: "800" }}
+      >
+        Schedule
+      </Text>
+      <EmptyState
+        title="No availability yet"
+        body="Tell us when you are free and we will explain practical options."
+      />
+    </Screen>
+  );
+}

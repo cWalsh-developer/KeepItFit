@@ -1,5 +1,5 @@
-import * as SecureStore from 'expo-secure-store';
-import { create } from 'zustand';
+import * as SecureStore from "expo-secure-store";
+import { create } from "zustand";
 
 type Tokens = { access_token: string; refresh_token: string };
 type AuthState = {
@@ -13,9 +13,9 @@ type AuthState = {
   signOut: () => Promise<void>;
 };
 
-const ACCESS = 'workout.accessToken';
-const REFRESH = 'workout.refreshToken';
-const ONBOARDING = 'workout.onboardingComplete';
+const ACCESS = "workout.accessToken";
+const REFRESH = "workout.refreshToken";
+const ONBOARDING = "workout.onboardingComplete";
 
 export const useAuth = create<AuthState>((set) => ({
   hydrated: false,
@@ -29,7 +29,7 @@ export const useAuth = create<AuthState>((set) => ({
     set({
       accessToken: accessToken ?? undefined,
       refreshToken: refreshToken ?? undefined,
-      onboardingComplete: onboarding === 'true',
+      onboardingComplete: onboarding === "true",
       hydrated: true,
     });
   },
@@ -38,15 +38,20 @@ export const useAuth = create<AuthState>((set) => ({
       SecureStore.setItemAsync(ACCESS, tokens.access_token),
       SecureStore.setItemAsync(REFRESH, tokens.refresh_token),
     ]);
-    set({ accessToken: tokens.access_token, refreshToken: tokens.refresh_token });
+    set({
+      accessToken: tokens.access_token,
+      refreshToken: tokens.refresh_token,
+    });
   },
   finishOnboarding: async () => {
-    await SecureStore.setItemAsync(ONBOARDING, 'true');
+    await SecureStore.setItemAsync(ONBOARDING, "true");
     set({ onboardingComplete: true });
   },
   signOut: async () => {
-    await Promise.all([SecureStore.deleteItemAsync(ACCESS), SecureStore.deleteItemAsync(REFRESH)]);
+    await Promise.all([
+      SecureStore.deleteItemAsync(ACCESS),
+      SecureStore.deleteItemAsync(REFRESH),
+    ]);
     set({ accessToken: undefined, refreshToken: undefined });
   },
 }));
-

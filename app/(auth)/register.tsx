@@ -1,3 +1,96 @@
-import { useState } from 'react'; import { router } from 'expo-router'; import { Text } from 'react-native'; import { useForm, Controller } from 'react-hook-form'; import { z } from 'zod'; import { Screen } from '@/components/Screen'; import { FormField } from '@/components/FormField'; import { PrimaryButton } from '@/components/PrimaryButton'; import { api, ApiError } from '@/lib/api'; import { useAuth } from '@/store/auth';
-const schema=z.object({display_name:z.string().trim().min(1),email:z.string().email(),password:z.string().min(10)});type Values=z.infer<typeof schema>;
-export default function Register(){const [failure,setFailure]=useState('');const signIn=useAuth(x=>x.signIn);const {control,handleSubmit,formState:{isSubmitting}}=useForm<Values>({defaultValues:{display_name:'',email:'',password:''}});const submit=handleSubmit(async values=>{if(!schema.safeParse(values).success){setFailure('Add your name, a valid email, and a password of at least 10 characters.');return;}try{await signIn(await api<{access_token:string;refresh_token:string}>('/auth/register',{method:'POST',body:JSON.stringify(values)}));router.replace('/onboarding');}catch(e){setFailure(e instanceof ApiError?e.message:'Unable to connect.');}});return <Screen>{failure?<Text accessibilityRole="alert" style={{color:'#8A1C1C'}}>{failure}</Text>:null}<Controller control={control} name="display_name" render={({field})=><FormField label="Display name" value={field.value} onChangeText={field.onChange}/>}/><Controller control={control} name="email" render={({field})=><FormField label="Email" autoCapitalize="none" keyboardType="email-address" value={field.value} onChangeText={field.onChange}/>}/><Controller control={control} name="password" render={({field})=><FormField label="Password (10 characters minimum)" secureTextEntry value={field.value} onChangeText={field.onChange}/>}/><PrimaryButton label="Create account" onPress={submit} loading={isSubmitting}/></Screen>}
+import { useState } from "react";
+import { router } from "expo-router";
+import { Text } from "react-native";
+import { useForm, Controller } from "react-hook-form";
+import { z } from "zod";
+import { Screen } from "@/components/Screen";
+import { FormField } from "@/components/FormField";
+import { PrimaryButton } from "@/components/PrimaryButton";
+import { api, ApiError } from "@/lib/api";
+import { useAuth } from "@/store/auth";
+const schema = z.object({
+  display_name: z.string().trim().min(1),
+  email: z.string().email(),
+  password: z.string().min(10),
+});
+type Values = z.infer<typeof schema>;
+export default function Register() {
+  const [failure, setFailure] = useState("");
+  const signIn = useAuth((x) => x.signIn);
+  const {
+    control,
+    handleSubmit,
+    formState: { isSubmitting },
+  } = useForm<Values>({
+    defaultValues: { display_name: "", email: "", password: "" },
+  });
+  const submit = handleSubmit(async (values) => {
+    if (!schema.safeParse(values).success) {
+      setFailure(
+        "Add your name, a valid email, and a password of at least 10 characters.",
+      );
+      return;
+    }
+    try {
+      await signIn(
+        await api<{ access_token: string; refresh_token: string }>(
+          "/auth/register",
+          { method: "POST", body: JSON.stringify(values) },
+        ),
+      );
+      router.replace("/onboarding");
+    } catch (e) {
+      setFailure(e instanceof ApiError ? e.message : "Unable to connect.");
+    }
+  });
+  return (
+    <Screen>
+      {failure ? (
+        <Text accessibilityRole="alert" style={{ color: "#8A1C1C" }}>
+          {failure}
+        </Text>
+      ) : null}
+      <Controller
+        control={control}
+        name="display_name"
+        render={({ field }) => (
+          <FormField
+            label="Display name"
+            value={field.value}
+            onChangeText={field.onChange}
+          />
+        )}
+      />
+      <Controller
+        control={control}
+        name="email"
+        render={({ field }) => (
+          <FormField
+            label="Email"
+            autoCapitalize="none"
+            keyboardType="email-address"
+            value={field.value}
+            onChangeText={field.onChange}
+          />
+        )}
+      />
+      <Controller
+        control={control}
+        name="password"
+        render={({ field }) => (
+          <FormField
+            label="Password (10 characters minimum)"
+            secureTextEntry
+            value={field.value}
+            onChangeText={field.onChange}
+          />
+        )}
+      />
+      <PrimaryButton
+        label="Create account"
+        onPress={submit}
+        loading={isSubmitting}
+      />
+    </Screen>
+  );
+}
