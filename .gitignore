@@ -7,3 +7,4 @@ coverage/
 audit-full.json
 audit-production.json
 outdated.json
+/mobile/
